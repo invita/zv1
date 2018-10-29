@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\ReindexZrtev::class,
         Commands\ReindexZrtve::class,
+        Commands\RecreateIndex::class,
     ];
 
     /**

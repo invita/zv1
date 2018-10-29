@@ -3,26 +3,26 @@
 namespace App\Console\Commands;
 
 use App\Helpers\ElasticHelpers;
+use App\Models\Entity;
 use App\Models\Zrtev;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class ReindexZrtve extends Command
+class RecreateIndex extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'reindex:zrtve';
+    protected $signature = 'reindex:recreate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Reindex zrtve1 from database into elastic';
+    protected $description = 'Recreate empty index only';
 
     /**
      * Create a new command instance.
@@ -41,23 +41,9 @@ class ReindexZrtve extends Command
      */
     public function handle()
     {
-
-        if ($this->confirm('Are you sure you wish to reindex all zrtve 1. sv?', true)) {
-
-            // TODO...
+        if ($this->confirm('Are you sure you wish to recreate index?', true)) {
             ElasticHelpers::recreateIndex();
-
-            //$zrtve = \DB::table('ZRT1_GLAVNA_TABELA')->get();
-            $zrtve = Zrtev::all();
-
-            $cnt = 0;
-            foreach ($zrtve as $zrtev) {
-                $this->info($zrtev["ID"]);
-                Artisan::call("reindex:zrtev", ["zrtevId" => $zrtev["ID"]]);
-                $cnt++;
-            }
-
-            $this->info("All done! Zrtve reindexed: {$cnt}");
+            $this->info("Index '".env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1")."' recreated");
         }
     }
 }
