@@ -15,6 +15,45 @@ class ElasticHelpers
     public static function recreateIndex()
     {
 
+        $indexExists = \Elasticsearch::connection()->indices()->exists([
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1")
+        ]);
+        if ($indexExists) {
+            $deleteIndexArgs = [
+                "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            ];
+            \Elasticsearch::connection()->indices()->delete($deleteIndexArgs);
+        }
+
+        $createIndexArgs = [
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+        ];
+        $createIndexArgs["body"] = <<<HERE
+{
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "analysis": {
+            "analyzer": {
+                "lowercase_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": [ "lowercase" ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "zrtev1": {
+            "date_detection": false
+        }
+    }
+}
+HERE;
+
+        return \Elasticsearch::connection()->indices()->create($createIndexArgs);
+
+        /*
         $deleteIndexArgs = [
             "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
             "type" => "",
@@ -22,7 +61,6 @@ class ElasticHelpers
         ];
         \Elasticsearch::connection()->delete($deleteIndexArgs);
 
-        /*
         $createIndexArgs = [
             "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
             "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
