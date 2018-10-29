@@ -15,17 +15,56 @@ class ElasticHelpers
     public static function recreateIndex()
     {
 
+        $indexExists = \Elasticsearch::connection()->indices()->exists([
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1")
+        ]);
+        if ($indexExists) {
+            $deleteIndexArgs = [
+                "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            ];
+            \Elasticsearch::connection()->indices()->delete($deleteIndexArgs);
+        }
+
+        $createIndexArgs = [
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+        ];
+        $createIndexArgs["body"] = <<<HERE
+{
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "analysis": {
+            "analyzer": {
+                "lowercase_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": [ "lowercase" ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "zrtev1": {
+            "date_detection": false
+        }
+    }
+}
+HERE;
+
+        return \Elasticsearch::connection()->indices()->create($createIndexArgs);
+
+        /*
+
         $deleteIndexArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
             "type" => "",
             "id" => "",
         ];
         \Elasticsearch::connection()->delete($deleteIndexArgs);
 
-        /*
         $createIndexArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "id" => "",
             "body" => []
         ];
@@ -43,8 +82,8 @@ class ElasticHelpers
     public static function indexZrtev($zrtevId, $body)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "id" => $zrtevId,
             "body" => $body
         ];
@@ -59,8 +98,8 @@ class ElasticHelpers
     public static function deleteZrtev($zrtevId)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "id" => $zrtevId,
         ];
         return \Elasticsearch::connection()->delete($requestArgs);
@@ -76,8 +115,8 @@ class ElasticHelpers
     public static function search($query, $offset = 0, $limit = 10)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "body" => [
                 "query" => [
                     "query_string" => [
@@ -96,8 +135,8 @@ class ElasticHelpers
     public static function searchByIdArray($idArray)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "body" => [
                 "query" => [
                     "ids" => [
@@ -113,8 +152,8 @@ class ElasticHelpers
     public static function searchById($idArray)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
             "body" => [
                 "query" => [
                     "ids" => [
