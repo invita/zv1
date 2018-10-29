@@ -15,56 +15,17 @@ class ElasticHelpers
     public static function recreateIndex()
     {
 
-        $indexExists = \Elasticsearch::connection()->indices()->exists([
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1")
-        ]);
-        if ($indexExists) {
-            $deleteIndexArgs = [
-                "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            ];
-            \Elasticsearch::connection()->indices()->delete($deleteIndexArgs);
-        }
-
-        $createIndexArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-        ];
-        $createIndexArgs["body"] = <<<HERE
-{
-    "settings": {
-        "number_of_shards": 1,
-        "number_of_replicas": 0,
-        "analysis": {
-            "analyzer": {
-                "lowercase_analyzer": {
-                    "type": "custom",
-                    "tokenizer": "standard",
-                    "filter": [ "lowercase" ]
-                }
-            }
-        }
-    },
-    "mappings": {
-        "zrtev1": {
-            "date_detection": false
-        }
-    }
-}
-HERE;
-
-        return \Elasticsearch::connection()->indices()->create($createIndexArgs);
-
-        /*
-
         $deleteIndexArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
             "type" => "",
             "id" => "",
         ];
         \Elasticsearch::connection()->delete($deleteIndexArgs);
 
+        /*
         $createIndexArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "id" => "",
             "body" => []
         ];
@@ -82,8 +43,8 @@ HERE;
     public static function indexZrtev($zrtevId, $body)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "id" => $zrtevId,
             "body" => $body
         ];
@@ -98,8 +59,8 @@ HERE;
     public static function deleteZrtev($zrtevId)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "id" => $zrtevId,
         ];
         return \Elasticsearch::connection()->delete($requestArgs);
@@ -112,31 +73,84 @@ HERE;
      * @param $limit Integer limit
      * @return array
      */
-    public static function search($query, $offset = 0, $limit = 10)
+    public static function search($query, $filter, $offset = 0, $limit = 10, $sortField = null, $sortOrder = "asc")
     {
+        foreach ($filter as $key => $val) {
+            $query .= " AND ".$key.":".$val;
+        }
+
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "body" => [
                 "query" => [
                     "query_string" => [
-                        "query" => $query
+                        "query" => $query,
                     ]
-                ]
-
+                ],
+                /*
+                "query" => [
+                    "match" => [
+                        "_all" => $query,
+                    ]
+                ],
+                */
+                //"filter" => $esFilter,
                 //"sort" => "id",
-                //"from" => $offset,
-                //"size" => $limit,
+                "from" => $offset,
+                "size" => $limit,
+            ]
+        ];
+
+        if ($sortField) {
+            $requestArgs["body"]["sort"] = [
+                [
+                    $sortField => ["order" => $sortOrder]
+                ]
+            ];
+        }
+
+        return \Elasticsearch::connection()->search($requestArgs);
+    }
+
+    /**
+     * Retrieves all matching documents from elastic search
+     * @param $query String to match
+     * @param $offset Integer offset
+     * @param $limit Integer limit
+     * @return array
+     */
+    /*
+    public static function searchFilter($filter, $offset = 0, $limit = 10)
+    {
+        $must = [];
+        foreach ($filter as $key => $val) {
+            $must[] = ["term" => [$key => $val]];
+        }
+
+        $requestArgs = [
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
+            "body" => [
+                "query" => [
+                    "bool" => [
+                        "must" => $must
+                    ]
+                ],
+                //"sort" => "id",
+                "from" => $offset,
+                "size" => $limit,
             ]
         ];
         return \Elasticsearch::connection()->search($requestArgs);
     }
+    */
 
     public static function searchByIdArray($idArray)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "body" => [
                 "query" => [
                     "ids" => [
@@ -152,8 +166,8 @@ HERE;
     public static function searchById($idArray)
     {
         $requestArgs = [
-            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve1"),
-            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev1"),
+            "index" => env("SI4_ELASTIC_ZRTVE_INDEX", "zrtve"),
+            "type" => env("SI4_ELASTIC_ZRTVE_DOCTYPE", "zrtev"),
             "body" => [
                 "query" => [
                     "ids" => [
@@ -197,6 +211,15 @@ HERE;
         if (isset($dataElastic["hits"]) && isset($dataElastic["hits"]["hits"])) {
             foreach ($dataElastic["hits"]["hits"] as $hit){
                 $result[$hit["_id"]] = $hit["_source"];
+            }
+        }
+        return $result;
+    }
+    public static function elasticResultToSimpleArray($dataElastic) {
+        $result = [];
+        if (isset($dataElastic["hits"]) && isset($dataElastic["hits"]["hits"])) {
+            foreach ($dataElastic["hits"]["hits"] as $hit){
+                $result[] = $hit["_source"];
             }
         }
         return $result;

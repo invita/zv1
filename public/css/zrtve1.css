@@ -12,7 +12,7 @@ body main {
 }
 
 img#logoImg, img#logoImg1 {
-    max-width: 100%;
+    max-width: 90%;
     height: auto;
     width: auto\9; /* ie8 */
 }
@@ -125,11 +125,11 @@ div#mainPaginator ul.pagination {
 @media only screen and (min-width: 64.0625em) {
     main {  min-height: 400px;  }
 }
-@media (max-width: 480px){
+@media (max-width: 640px){
     #logoImg{
         display: block;
         margin: 0 auto;
-        width: 50%;
+        width: 33%;
     }
 }
 
@@ -474,7 +474,7 @@ h2.podnaslov {
 .yesicon_small {
     width: 80px;
     height: 37px;
-    background: url(/img/ico-yes.png) left top no-repeat #BA1810;
+    background: url(/img/footer/ico-subscribe.png) left top no-repeat #BA1810;
     background-size: 20px;
     border: #780F0A solid 0px;
     background-position: 30px 8px;
@@ -879,6 +879,17 @@ img.dlIco {
 
 
 /* Zrtve1 */
+#pageHolder {
+    margin-top: 8px;
+}
+
+.moduleSearch, .moduleZrtev {
+    margin-top: 8px;
+}
+
+.defContainer { }
+.mb15 { margin-bottom: 15px; }
+
 .searchTitle {
     margin-top: 3em;
 }
@@ -888,21 +899,87 @@ img.dlIco {
 }
 
 .zrtevDetails {
-    margin: 2em;
+    margin-top: 5px;
+    margin-bottom: 5px;
     border: #ddd solid 1px;
 }
 
+.zrtevDetails .attrRow {
+    line-height: 28px;
+    /*
+    padding-top: 2px;
+    padding-bottom: 2px;
+    */
+}
+
 .zrtevDetails .attrName {
+    /*
     width: 160px;
-    display: inline-table;
     margin: 5px;
     font-size: 0.875rem;
+    */
+    display: inline-table;
     font-weight: bold;
+    padding-left: 5px !important;
 }
 .zrtevDetails .attrValue {
+    /*
     font-size: 0.875rem;
+    */
 }
 
 .zrtevDetails > div:nth-child(odd) {
     background-color: #F9F9F9;
+}
+
+#langSelect {
+    text-align: right;
+    padding: 5px 5px 0 0;
+}
+#langSelect a {
+    margin: 5px;
+}
+
+.center {
+    text-align: center;
+}
+.titleDiv {
+    font-size: 19px;
+    font-weight: bold;
+}
+.button_small {
+    width: 80px;
+    margin-bottom: 0;
+}
+
+.searchInputRow {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+#searchInput {
+    margin-bottom: 0;
+}
+
+a.stdLink {
+
+}
+
+a.zrtevPdfButton {
+    float: right;
+}
+
+a.noHover:hover {
+    border-bottom: none;
+}
+
+div.zrtevCDiv {
+    height: 32px;
+}
+
+img.imgBack {
+    width: 12px;
+    margin-top: 10px;
+}
+img.imgPdf {
+    width: 32px;
 }

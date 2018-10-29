@@ -17,7 +17,10 @@
 //});
 
 Route::get('/', 'IndexController@index');
-Route::get('/search', 'SearchController@index');
-Route::get('/zrtev', 'ZrtevController@index');
 
+Route::post('/api', 'ApiController@index');
+Route::post('/api/search', 'ApiController@search');
+Route::post('/api/dictionary', 'ApiController@dictionary');
+
+Route::get('/file/zrtevPdf', 'FileController@zrtevPdf');
 
