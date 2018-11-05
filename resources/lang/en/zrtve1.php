@@ -15,7 +15,8 @@ return [
 
     // Fields
     'field_ID' => 'Id',
-    'field_PRIIMEK' => 'Surname',
+    'field_PRIIMEK' => 'Last name',
+    'field_PRIIMEK2' => 'second form of last name',
     'field_IME' => 'Name',
     'field_ROJSTVO' => 'Birth date',
     'field_SMRT' => 'Death date',
@@ -37,6 +38,7 @@ return [
     'field_VPOKLIC' => 'Call',
     'field_VZROK' => 'Cause of death',
     'field_ZUPNIJA' => 'Parish',
+    'field_LAST_MODIFIED' => 'Record last modified',
 
     // Text
     'text_searchString' => 'Search victims',

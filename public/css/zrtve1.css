@@ -945,7 +945,10 @@ img.dlIco {
 }
 .titleDiv {
     font-size: 19px;
-    font-weight: bold;
+    color: #BA1810;
+}
+.textDiv {
+    font-size: 14px;
 }
 .button_small {
     width: 80px;

@@ -5,7 +5,7 @@ for (var apiName in si4.config.apis) {
         si4.api[apiName] = function(data, callback) {
             var apiUrl = si4.config.apis[apiName];
             $.post(apiUrl+"?_="+Math.random(), JSON.stringify(data), function(resp) {
-                console.log(apiName+" callback", resp);
+                //console.log(apiName+" callback", resp);
                 if (typeof(callback) == "function") callback(resp);
             });
         };

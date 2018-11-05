@@ -57,6 +57,7 @@ si4.modules.search = function(args) {
             VPOKLIC: { visible: false },
             VZROK: { visible: false },
             ZUPNIJA: { visible: false },
+            LAST_MODIFIED: { visible: false },
 
 
             /*

@@ -16,6 +16,7 @@ return [
     // Fields
     'field_ID' => 'Id',
     'field_PRIIMEK' => 'Priimek',
+    'field_PRIIMEK2' => 'Druga oblika priimka',
     'field_IME' => 'Ime',
     'field_ROJSTVO' => 'Datum rojstva',
     'field_SMRT' => 'Datum smrti',
@@ -37,6 +38,7 @@ return [
     'field_VPOKLIC' => 'Vpoklic',
     'field_VZROK' => 'Vzrok',
     'field_ZUPNIJA' => 'Župnija',
+    'field_LAST_MODIFIED' => 'Datum spremembe zapisa',
 
     // Text
     'text_searchString' => 'Iskalnik po žrtvah',
