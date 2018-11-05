@@ -22,5 +22,7 @@ Route::post('/api', 'ApiController@index');
 Route::post('/api/search', 'ApiController@search');
 Route::post('/api/dictionary', 'ApiController@dictionary');
 
+Route::get('/api/reindex', 'ApiController@reindex');
+
 Route::get('/file/zrtevPdf', 'FileController@zrtevPdf');
 

@@ -44,7 +44,6 @@ class ReindexZrtve extends Command
 
         if ($this->confirm('Are you sure you wish to reindex all zrtve 1. sv?', true)) {
 
-            // TODO...
             ElasticHelpers::recreateIndex();
 
             //$zrtve = \DB::table('ZRT1_GLAVNA_TABELA')->get();

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zrtev;
 use Illuminate\Http\Request;
 use App\Helpers\ElasticHelpers;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 
 class ApiController extends Controller
@@ -65,5 +68,32 @@ class ApiController extends Controller
         App::setLocale($lang);
         $result = Lang::get("zrtve1");
         return json_encode($result);
+    }
+
+    public function reindex(Request $request) {
+        $pass = $request->input('pass');
+        if ($pass !== env("SI4_REINDEX_API_PASS")) return response('', 403);
+
+        $fromId = intval($request->input('fromId'));
+        $toId = intval($request->input('toId'));
+
+        $query = DB::table("ZRT1_GLAVNA_TABELA")
+            ->where("id", ">=", $fromId)
+            ->where("id", "<=", $toId);
+
+        $rowCount = $query->count();
+        $zrtve = $query->get();
+
+        foreach ($zrtve as $zrtev) {
+            Artisan::call("reindex:zrtev", ["zrtevId" => $zrtev->ID]);
+        }
+
+        $result = [
+            "status" => true,
+            "count" => $rowCount,
+        ];
+
+        return json_encode($result);
+
     }
 }
