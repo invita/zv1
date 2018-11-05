@@ -604,6 +604,7 @@ si4.widget.si4DataTable = function(args)
 
     this.setPaginator = function(rowCount) {
         if (!rowCount) return;
+        if (rowCount > 10000) rowCount = 10000;
         if (!_p.dsControl) return;
         if (!_p.dsControlBottom) return;
 

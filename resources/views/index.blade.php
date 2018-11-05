@@ -96,7 +96,10 @@
         <div class="row">
             <hr/>
             <div class="large-9 medium-9 small-12 columns">
-                <p>© Copyright 2011-<?php echo date('Y'); ?> INZ, <span class="translateHtml" data-translateHtml="text_sistory"></span> <?php /* echo $HEAD_TITLE */ ?></p>
+                <p>
+                    <span>© Copyright 2011-<?php echo date('Y'); ?> INZ, <span>
+                    <span class="translateHtml" data-translateHtml="text_sistory"></span> <?php /* echo $HEAD_TITLE */ ?>
+                </p>
             </div>
             <div class="large-3 medium-3 small-12 columns"></div>
         </div>
