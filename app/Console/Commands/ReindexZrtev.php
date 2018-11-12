@@ -53,8 +53,12 @@ class ReindexZrtev extends Command
             ];
             */
             $indexBody = $zrtev;
+            print_r("To INDEX");
+            print_r($zrtev);
             ElasticHelpers::indexZrtev($zrtevId, $indexBody);
         } else {
+            print_r("To DELETE");
+            print_r($zrtev);
             ElasticHelpers::deleteZrtev($zrtevId);
         }
 

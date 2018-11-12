@@ -84,8 +84,16 @@ class ApiController extends Controller
         $rowCount = $query->count();
         $zrtve = $query->get();
 
-        foreach ($zrtve as $zrtev) {
-            Artisan::call("reindex:zrtev", ["zrtevId" => $zrtev->ID]);
+        if ($rowCount) {
+            // Single or Mass reindex
+            foreach ($zrtve as $zrtev) {
+                Artisan::call("reindex:zrtev", ["zrtevId" => $zrtev->ID]);
+            }
+        } else {
+            // Deletion
+            if ($fromId == $toId) {
+                Artisan::call("reindex:zrtev", ["zrtevId" => $fromId]);
+            }
         }
 
         $result = [

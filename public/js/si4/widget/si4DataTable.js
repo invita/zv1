@@ -16,6 +16,8 @@ si4.widget.si4DataTable = function(args)
     this.caption = si4.getArg(args, "caption", "");
     this.primaryKey = si4.getArg(args, "primaryKey", null);
     this.fields = si4.getArg(args, "fields", {});
+    this.fieldOrder = si4.getArg(args, "fieldOrder", "rowData"); // One of: "definedFields" - use order of given fields, "rowData" - use order as received from server
+    this.showOnlyDefinedFields = si4.getArg(args, "showOnlyDefinedFields", false);
     this.actions = si4.getArg(args, "actions", {});
     this.filter = si4.getArg(args, "filter", null);
     this.entityTitleNew = si4.getArg(args, "entityTitleNew", null);
@@ -33,6 +35,7 @@ si4.widget.si4DataTable = function(args)
     this.initExpandAll = si4.getArg(args, "initExpandAll", false);
     this.hideNoData = si4.getArg(args, "hideNoData", false);
     this.showPaginator = si4.getArg(args, "showPaginator", true);
+    this.maxRecordCount = si4.getArg(args, "maxRecordCount", 0);
     this.initRefresh = si4.getArg(args, "initRefresh", true);
     this.canExportXls = si4.getArg(args, "canExportXls", false);
     this.canExportCsv = si4.getArg(args, "canExportCsv", false);
@@ -133,6 +136,7 @@ si4.widget.si4DataTable = function(args)
         if (!_p.bluePrint || _p.bluePrint.noData) {
 
         } else {
+            console.log("_p.bluePrint.fields", _p.bluePrint.fields);
             for (var fieldKey in _p.bluePrint.fields) {
                 var fieldBP = _p.bluePrint.fields[fieldKey];
                 _p.headerRow.addField(fieldBP.fieldKey, fieldBP.fieldLabel, fieldBP);
@@ -210,6 +214,7 @@ si4.widget.si4DataTable = function(args)
             _p.insertButton.selector.click(function(e){
                 var row = _p.createEmptyRow();
                 var tabName = si4.mergePlaceholders(_p.entityTitleNew, row);
+                // TODO
                 var editorModuleArgs = si4.mergeObjects(_p.editorModuleArgs, {entityTitle:_p.entityTitleNew});
                 editorModuleArgs.onClosed = function(args){
                     _p.refresh();
@@ -323,7 +328,7 @@ si4.widget.si4DataTable = function(args)
             _p[cpName].filterImg = new si4.widget.si4Element({parent:_p[cpName].filterDiv.selector, tagName:"img", tagClass:"icon16 vmid"});
             _p[cpName].filterImg.selector.attr("src", "/img/icon/dataTable_filter.png");
             _p[cpName].filterSpan = new si4.widget.si4Element({parent:_p[cpName].filterDiv.selector, tagName:"span", tagClass:"vmid"});
-            _p[cpName].filterSpan.selector.html(si4.translate("dataTable_filter"));
+            _p[cpName].filterSpan.selector.html("Filter");
             _p[cpName].filterDiv.selector.click(function(){ _p.toggleFilter(); });
         }
 
@@ -483,27 +488,52 @@ si4.widget.si4DataTable = function(args)
 
         // Expand subDataTable
         if (_p.subDataTable) {
-            var exapndName = '_expand';
-            var expandBP = si4.mergeObjects({}, _p.fields[exapndName]);
-            expandBP.fieldKey = exapndName;
+            var expandName = '_expand';
+            var expandBP = si4.mergeObjects({}, _p.fields[expandName]);
+            expandBP.fieldKey = expandName;
             expandBP.fieldLabel = 'Expand';
             expandBP.fieldType = 'expand';
             expandBP.canSort = false;
             expandBP.canFilter = false;
             expandBP.editable = false;
             expandBP.initValue = _p.getInitValueForType(expandBP.fieldType);
-            bluePrint.fields[exapndName] = expandBP;
+            bluePrint.fields[expandName] = expandBP;
         }
+
 
         for (var i in tableData) {
             var row = tableData[i];
-            for (var fieldName in row) {
+
+            var fieldNamesOrdered;
+            switch (this.fieldOrder) {
+                // definedFields ordering strategy
+                case "definedFields":
+                    // First remember field names, order as defined
+                    fieldNamesOrdered = Object.keys(_p.fields);
+                    // Then append non-defined fieldNames from row data
+                    for (var fieldName in row) {
+                        if (fieldNamesOrdered.indexOf(fieldName) === -1) fieldNamesOrdered.push(fieldName);
+                    }
+                    break;
+                // rowData ordering strategy
+                case "rowData": default:
+                fieldNamesOrdered = Object.keys(row);
+                break;
+            }
+
+
+            for (var fieldNameIdx in fieldNamesOrdered) {
+                var fieldName = fieldNamesOrdered[fieldNameIdx];
                 if (!bluePrint.fields[fieldName]) {
                     var fieldBP = si4.mergeObjects({}, _p.fields[fieldName]);
                     fieldBP.fieldKey = fieldName;
                     fieldBP.fieldLabel = fieldBP.caption ? fieldBP.caption : si4.captionize(fieldName);
                     fieldBP.fieldType = _p.getValueType(row[fieldName]);
                     fieldBP.initValue = _p.getInitValueForType(fieldBP.fieldType);
+
+                    var isFieldDefined = _p.fields[fieldName] ? true : false;
+                    if (_p.showOnlyDefinedFields && !isFieldDefined) fieldBP.visible = false;
+
                     bluePrint.fields[fieldName] = fieldBP;
                 }
             }
@@ -604,9 +634,14 @@ si4.widget.si4DataTable = function(args)
 
     this.setPaginator = function(rowCount) {
         if (!rowCount) return;
-        if (rowCount > 10000) rowCount = 10000;
         if (!_p.dsControl) return;
         if (!_p.dsControlBottom) return;
+        var maxRowCountExceeded = false;
+
+        if (this.maxRecordCount && rowCount > this.maxRecordCount) {
+            maxRowCountExceeded = true;
+            rowCount = this.maxRecordCount;
+        }
 
         if (_p.dataSource && _p.dataSource.pageCount) _p.rowsPerPage = _p.dataSource.pageCount;
 
@@ -616,10 +651,13 @@ si4.widget.si4DataTable = function(args)
 
         if (_p.currentPage > _p.currentPageCount) _p.currentPage = _p.currentPageCount;
 
+        _p.currentPageCountDisplay = _p.currentPageCount;
+        if (maxRowCountExceeded) _p.currentPageCountDisplay += "+";
+
         _p.dsControl.pageInput.selector.val(_p.currentPage);
-        _p.dsControl.pageCount.selector.val(_p.currentPageCount);
+        _p.dsControl.pageCount.selector.val(_p.currentPageCountDisplay);
         _p.dsControlBottom.pageInput.selector.val(_p.currentPage);
-        _p.dsControlBottom.pageCount.selector.val(_p.currentPageCount);
+        _p.dsControlBottom.pageCount.selector.val(_p.currentPageCountDisplay);
     };
 
     this.setPaginatorRowsPerPage = function(newMaxRows) {
@@ -1147,13 +1185,13 @@ si4.widget.si4DataTableField = function(tableRowWnd, args) {
                     _p.formViewInstance.addInput({name:fKey, type:"flat", value:fVal, readOnly:true});
 
                     /*
-                    var inputArgs = {name:fKey, type:"flat", value:fVal, readOnly:true};
-                    if (fVal && fVal[0] && fVal[0].codeId) {
-                        inputArgs.isArray = true;
-                        inputArgs.withCode = si4.codes.pubSource;
-                    }
-                    _p.formViewInstance.addInput(inputArgs);
-                    */
+                     var inputArgs = {name:fKey, type:"flat", value:fVal, readOnly:true};
+                     if (fVal && fVal[0] && fVal[0].codeId) {
+                     inputArgs.isArray = true;
+                     inputArgs.withCode = si4.codes.pubSource;
+                     }
+                     _p.formViewInstance.addInput(inputArgs);
+                     */
                 }
             }
         } else if (_p.dataField && _p.actions) {
@@ -1166,9 +1204,9 @@ si4.widget.si4DataTableField = function(tableRowWnd, args) {
                 var action;
                 switch (actionType) {
                     case "link": default:
-                        action = new si4.widget.si4Element({parent:_p.valueDiv.selector});
-                        action.selector.html(actionLabel);
-                        break;
+                    action = new si4.widget.si4Element({parent:_p.valueDiv.selector});
+                    action.selector.html(actionLabel);
+                    break;
                     case "button":
                         action = new si4.widget.si4Input({parent:_p.valueDiv.selector, type:'button'});
                         action.setValue(actionLabel);
@@ -1183,7 +1221,7 @@ si4.widget.si4DataTableField = function(tableRowWnd, args) {
                 _p.valueDiv.actions[aKey] = action;
             }
             //_p.valueDiv.selector.html('Actions!');
-        //} else if (_p.dataField && _p.editorType == "input") {
+            //} else if (_p.dataField && _p.editorType == "input") {
 
         } else if (_p.filterField) {
 
@@ -1237,7 +1275,7 @@ si4.widget.si4DataTableField = function(tableRowWnd, args) {
     this._recalcInputWidth = function(){
         if (_p.hasInput && _p.editorType != "select") {
             _p.input.input.selector.css("width", "");
-            var newWidth = _p.selector.width()+7;
+            var newWidth = _p.selector.width() +8;
             if (_p.width && newWidth < _p.width) newWidth = _p.width;
             _p.input.input.selector.css("width", newWidth+"px");
         }
@@ -1298,7 +1336,6 @@ si4.widget.si4DataTableDataSource = function(args) {
     this.sortOrder = si4.getArg(args, "sortOrder", "asc");
     this.pageStart = si4.getArg(args, "pageStart", 0);
     this.pageCount = si4.getArg(args, "pageCount", si4.defaults.dataTableRowsPerPage);
-    this.pageCount = si4.getArg(args, "pageCount", si4.defaults.dataTableRowsPerPage);
     this.editModule = si4.getArg(args, "editModule", null);
     this.staticData = si4.getArg(args, "staticData", {});
 
@@ -1320,7 +1357,13 @@ si4.widget.si4DataTableDataSource = function(args) {
             data:args
         };
 
-        if (_p.staticData) methodCallData.staticData = _p.staticData;
+        if (_p.staticData) {
+            if (typeof(_p.staticData) === "function") {
+                methodCallData.staticData = _p.staticData(_p, methodName, args);
+            } else {
+                methodCallData.staticData = _p.staticData;
+            }
+        }
 
         methodCallData = si4.mergeObjects(methodCallData, _p.getPaginationData());
 
