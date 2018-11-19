@@ -29,11 +29,11 @@ class FileController extends Controller
             $html .= '<h3>'.__("zrtve1.pdf_title").': '.$id.'</h3>';
 
             $fields = [
-                "ID", "PRIIMEK", "IME", "ROJSTVO", "SMRT",
-                "BIVALISCE", "CIN", "PRIIMEK2", "STARSI", "DEZELA",
-                "DOMOVINSKA", "ENOTA", "IZVOR", "KRAJ_ROJSTVA", "KRAJ_SMRTI",
-                "OBCINA", "OPOMBE", "OSTALO", "POKOP", "STAN",
-                "VIRI", "VPOKLIC", "VZROK", "ZUPNIJA",
+                "ID", "PRIIMEK", "PRIIMEK2", "IME", "STARSI",
+                "ROJSTVO", "KRAJ_ROJSTVA", "ZUPNIJA", "BIVALISCE", "OBCINA", "DEZELA", "DOMOVINSKA", "STAN",
+                "VPOKLIC", "SMRT", "KRAJ_SMRTI", "VZROK", "POKOP",
+                "CIN", "ENOTA", "OSTALO",
+                "VIRI", "OPOMBE", "IZVOR",
             ];
 
             $idx = 0;
