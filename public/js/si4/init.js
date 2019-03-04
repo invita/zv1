@@ -32,6 +32,7 @@ $(document).ready(function() {
             contentElement: si4.data.contentElement
         });
 
+        //if (!location.pathname || location.pathname == '/')
         si4.navigation.switchPage("index");
 
         $("#searchFormZrtve").submit(function(e) {

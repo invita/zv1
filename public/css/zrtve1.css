@@ -12,9 +12,14 @@ body main {
 }
 
 img#logoImg, img#logoImg1 {
+    max-width: 170px;
+    max-height: 116px;
+    /*
     max-width: 90%;
     height: auto;
-    width: auto\9; /* ie8 */
+    */
+
+    /*width: auto\9;*/ /* ie8 */
 }
 
 /*header a, a:visited, a b { color: #8e130b; text-decoration: none; }
@@ -880,7 +885,7 @@ img.dlIco {
 
 /* Zrtve1 */
 #pageHolder {
-    margin-top: 8px;
+    margin-top: 25px;
 }
 
 .moduleSearch, .moduleZrtev {
@@ -959,6 +964,32 @@ img.dlIco {
     padding-left: 100px;
     padding-right: 100px;
 }
+.searchInputTabs {
+    padding-left: 100px;
+    padding-right: 100px;
+    display: flex;
+    flex-direction: row;
+}
+.searchInputTabs .tab {
+    display: block;
+    background-color: #FFFFFF;
+    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    line-height: 2;
+    text-decoration: none;
+    color: #222222;
+    padding: .2rem 1.5rem!important;
+    border: 0px solid #CCC;
+    border-radius: 2px 2px 0px 0px;
+}
+.searchInputTabs .tab.active {
+    border: 1px solid #CCC;
+    border-bottom: 0px;
+    background-color: #EFEFEF;
+    color: #222222;
+}
+
 #searchInput {
     margin-bottom: 0;
 }

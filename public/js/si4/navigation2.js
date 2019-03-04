@@ -3,6 +3,47 @@ si4.si4Navigation = function(args)
     // Init
     var _p = this;
 
+    // Settings
+    this.contentElement = si4.getArg(args, "contentElement", null);
+
+    this.switchPage = function(pageName, pageArgs) {
+        let url = "?pn="+pageName;
+        if (pageArgs) {
+            console.log("pageArgs", pageArgs);
+            let pageArgsBase64 = btoa(JSON.stringify(pageArgs));
+            url += "&pa="+pageArgsBase64
+        }
+        history.pushState({pageName: pageName, pageArgs: pageArgs}, document.title, url);
+        this.renderPage(pageName, pageArgs);
+    };
+
+    this.renderPage = function(pageName, pageArgs) {
+        $(_p.contentElement).empty();
+
+        if (typeof(si4.modules[pageName]) == "function") {
+            var pageArgs = Object.assign({}, pageArgs);
+            pageArgs.parent = _p.contentElement;
+            var page = new si4.modules[pageName](pageArgs);
+        }
+    };
+
+    /*
+    window.addEventListener("pop")
+    history.onpopstate = function() {
+
+    };
+    */
+
+    window.addEventListener("popstate", function(e) {
+        //alert("popstate "+ document.location+", "+JSON.stringify(e.state));
+        let pageName = e.state.pageName;
+        let pageArgs = e.state.pageArgs;
+        _p.renderPage(pageName, pageArgs);
+    });
+
+
+    /*
+
     this.currentPage = {
         pageName: "",
         pageArgs: {}
@@ -15,7 +56,6 @@ si4.si4Navigation = function(args)
 
     // Implementation
     this.switchPage = function(pageName, pageArgs) {
-        console.log("switchPage", pageName, pageArgs);
         if (_p.currentPage.pageName) {
             _p.historyStack.push(_p.currentPage);
         }
@@ -35,7 +75,6 @@ si4.si4Navigation = function(args)
 
     this._switchPage = function(page) {
         //console.log("navigate", page);
-        history.pushState(page, document.title, null);
         _p.currentPage = page;
         _p.renderPage();
     };
@@ -50,11 +89,7 @@ si4.si4Navigation = function(args)
         }
     };
 
-    window.addEventListener("popstate", function(e) {
-        _p.back();
-    });
-
-
+    */
 
 
     /*

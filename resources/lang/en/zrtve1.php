@@ -50,6 +50,7 @@ return [
 
     // Chart
     'chart_button_refresh' => 'Refresh chart',
+    'chart_checkItOut' => 'View deaths in a chart',
 
     // PDF report
     'pdf_title' => '1st world war death',

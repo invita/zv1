@@ -20,8 +20,8 @@ class ChartController extends Controller
             ["key" => "bar", "value" => "Bar chart"],
             ["key" => "line", "value" => "Line chart"],
         ];
-        $froms = $this->dateInterval($lang, '1914-01', '1918-12');
-        $tos = $this->dateInterval($lang, '1914-01', '1918-12');
+        $froms = self::dateInterval($lang, '1914-01', '1918-12');
+        $tos = self::dateInterval($lang, '1914-01', '1918-12');
 
         $qType = $request->input('type');
         $qFrom = $request->input('from');
@@ -29,13 +29,9 @@ class ChartController extends Controller
         $qLand = $request->input('land');
         $qMunic = $request->input('munic');
 
-        $chartData = [];
-
-        if ($qType) {
-            $chartDataElastic = ElasticHelpers::searchChartData($qFrom, $qTo, $qLand, $qMunic);
-            $chartData = $this->fillMissingKeysAndSort($qFrom, $qTo, $froms, $tos, $chartDataElastic);
-            //print_r($chartData);
-        }
+        $chartDataElastic = ElasticHelpers::searchChartData($qFrom, $qTo, $qLand, $qMunic);
+        $chartData = self::fillMissingKeysAndSort($qFrom, $qTo, $froms, $tos, $chartDataElastic);
+        //print_r($chartData);
 
 
         $footerHtml = FooterBuilder::getHtml();
@@ -60,7 +56,7 @@ class ChartController extends Controller
         return view('chart', $viewData);
     }
 
-    private function dateInterval($lang, $from, $to) {
+    public static function dateInterval($lang, $from, $to) {
         $fromExpl = explode("-", $from);
         $fromYear = intval($fromExpl[0]);
         $fromMonth = intval($fromExpl[1]);
@@ -83,7 +79,7 @@ class ChartController extends Controller
         return $result;
     }
 
-    private function fillMissingKeysAndSort($qFrom, $qTo, $froms, $tos, $chartDataElastic) {
+    public static function fillMissingKeysAndSort($qFrom, $qTo, $froms, $tos, $chartDataElastic) {
         $existingKeys = array_keys($chartDataElastic);
 
         foreach ($froms as $f) {

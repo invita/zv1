@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\CommonHelpers;
 use App\Helpers\ContentBuilder;
+use App\Helpers\ElasticHelpers;
 use App\Helpers\FooterBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -32,6 +33,10 @@ class IndexController extends Controller
         else
             $contentHtml = ContentBuilder::getHtmlForFirstPage();
 
+        $froms = ChartController::dateInterval($lang, '1914-01', '1918-12');
+        $tos = ChartController::dateInterval($lang, '1914-01', '1918-12');
+        $chartDataElastic = ElasticHelpers::searchChartData(null, null, null, null);
+        $chartData = ChartController::fillMissingKeysAndSort(null, null, $froms, $tos, $chartDataElastic);
 
         $footerHtml = FooterBuilder::getHtml();
 
@@ -40,6 +45,7 @@ class IndexController extends Controller
             "zrtve" => [],
             "lang" => $lang,
             "contentHtml" => $contentHtml,
+            "chartData" => $chartData,
             "footerHtml" => $footerHtml
         ];
         return view('index', $viewData);
