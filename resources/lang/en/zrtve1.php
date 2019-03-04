@@ -41,7 +41,7 @@ return [
     'field_LAST_MODIFIED' => 'Record last modified',
 
     // Text
-    'text_searchString' => 'Search victims',
+    'text_searchString' => 'Search victims. You may use wildcard *, i.e. Jane*',
     'text_sistory' => 'SISTORY - History of Slovenia',
     'text_newsletterSignup' => 'Singup to newsletter',
     'text_vseZrtve' => 'All deaths',
