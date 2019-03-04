@@ -7,6 +7,7 @@
     <title>Žrtve 1. svetovne vojne</title>
 
     <script src="/lib/jquery/jquery-2.1.1.js"></script>
+    <script src="/lib/Chart.min.js"></script>
 
     <script src="/js/si4/si4.js"></script>
     <script src="/js/si4/config.js"></script>

@@ -19,6 +19,11 @@ $(document).ready(function() {
             $(el).removeAttr("data-translateHtml");
             $(el).removeClass("translateHtml");
         });
+        $('.translateValue').each(function(idx, el) {
+            $(el).attr("value", si4.translate($(el).attr("data-translateValue")));
+            $(el).removeAttr("data-translateValue");
+            $(el).removeClass("translateValue");
+        });
 
         si4.data.initView = $('#initView');
         si4.data.initView.detach();

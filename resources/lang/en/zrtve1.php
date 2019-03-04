@@ -48,6 +48,9 @@ return [
     'text_back' => 'Back',
     'text_downloadPdf' => 'Download PDF',
 
+    // Chart
+    'chart_button_refresh' => 'Refresh chart',
+
     // PDF report
     'pdf_title' => '1st world war death',
 ];

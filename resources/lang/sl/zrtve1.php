@@ -41,12 +41,15 @@ return [
     'field_LAST_MODIFIED' => 'Datum spremembe zapisa',
 
     // Text
-    'text_searchString' => 'Iskalnik po žrtvah',
+    'text_searchString' => 'Vpišite iskalni niz. Uporabljate lahko *, npr. Jane*',
     'text_sistory' => 'Zgodovina Slovenije - SIstory',
     'text_newsletterSignup' => 'Prijava na novice',
     'text_vseZrtve' => 'Vse žrtve',
     'text_back' => 'Nazaj',
     'text_downloadPdf' => 'Prenesi PDF',
+
+    // Chart
+    'chart_button_refresh' => 'Osveži graf',
 
     // PDF report
     'pdf_title' => 'Žrtev 1. sv. vojne',

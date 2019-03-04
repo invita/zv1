@@ -17,6 +17,7 @@
 //});
 
 Route::get('/', 'IndexController@index');
+Route::get('/chart', 'ChartController@index');
 
 Route::post('/api', 'ApiController@index');
 Route::post('/api/search', 'ApiController@search');
