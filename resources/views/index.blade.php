@@ -25,7 +25,10 @@
                         <div class="row collapse searchInputTabs">
                             <a class="tab translateHtml" data-translateHtml="mainTabs_pub" href="http://www.sistory.si/"></a>
                             <a class="tab active translateHtml" data-translateHtml="mainTabs_zrt1"></a>
+                            <!--
                             <a class="tab translateHtml" data-translateHtml="mainTabs_zrt2" href="http://zv2.sistory.si/?lang={{$lang}}"></a>
+                            -->
+                            <a class="tab translateHtml" data-translateHtml="mainTabs_zrt2" href="http://www.sistory.si/zrtve"></a>
                             <a class="tab translateHtml" data-translateHtml="mainTabs_pop" href="http://www.sistory.si/popis"></a>
                             <a class="tab translateHtml" data-translateHtml="mainTabs_zic" href="http://www.sistory.si/zic"></a>
                         </div>
@@ -38,7 +41,10 @@
                             <ul id="drop1" class="f-dropdown" data-dropdown-content>
                                 <li><a class="translateHtml" data-translateHtml="mainTabs_pub" href="http://www.sistory.si/"></a></li>
                                 <li><a class="active translateHtml" data-translateHtml="mainTabs_zrt1"></a></li>
+                                <!--
                                 <li><a class="translateHtml" data-translateHtml="mainTabs_zrt2" href="http://zv2.sistory.si/?lang={{$lang}}"></a></li>
+                                -->
+                                <li><a class="translateHtml" data-translateHtml="mainTabs_zrt2" href="http://www.sistory.si/zrtve"></a></li>
                                 <li><a class="translateHtml" data-translateHtml="mainTabs_pop" href="http://www.sistory.si/popis"></a></li>
                                 <li><a class="translateHtml" data-translateHtml="mainTabs_zic" href="http://www.sistory.si/zic"></a></li>
                             </ul>
