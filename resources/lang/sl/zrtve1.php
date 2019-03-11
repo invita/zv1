@@ -50,6 +50,7 @@ return [
 
     // Chart
     'chart_button_refresh' => 'Osveži graf',
+    'chart_num_deaths' => '# smrti',
     'chart_checkItOut' => 'Smrti vojne v grafu',
 
     // PDF report

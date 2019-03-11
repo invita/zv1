@@ -50,6 +50,7 @@ return [
 
     // Chart
     'chart_button_refresh' => 'Refresh chart',
+    'chart_num_deaths' => '# of deaths',
     'chart_checkItOut' => 'View deaths in a chart',
 
     // PDF report

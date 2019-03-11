@@ -14,6 +14,7 @@
     <script src="/js/si4/util.js"></script>
     <script src="/js/si4/codes.js"></script>
     <script src="/js/si4/api.js"></script>
+    <script src="/js/si4/chart.js"></script>
     <script src="/js/si4/navigation.js"></script>
     <script src="/js/si4/translate/translate.js"></script>
     <script src="/js/si4/object/si4EventBase.js"></script>

@@ -43,5 +43,9 @@ $(document).ready(function() {
             }
         });
 
+        // Chart
+        var chartCanvas = document.getElementById("chartCanvas");
+        if (chartCanvas) si4.initChart();
+
     });
 });
