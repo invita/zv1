@@ -21,7 +21,7 @@
             <div class="search large-10 medium-10 small-12 columns" style="height: 7em;">
                 <div class="searchTitle">
                     <!-- Desktop tabs -->
-                    <div class="show-for-large-only">
+                    <div class="show-for-large-up">
                         <div class="row collapse searchInputTabs">
                             <a class="tab translateHtml" data-translateHtml="mainTabs_pub" href="http://www.sistory.si/"></a>
                             <a class="tab active translateHtml" data-translateHtml="mainTabs_zrt1"></a>
