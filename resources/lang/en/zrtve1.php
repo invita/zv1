@@ -59,6 +59,13 @@ return [
     'chart_button_refresh' => 'Refresh chart',
     'chart_num_deaths' => '# of deaths',
     'chart_checkItOut' => 'View deaths in a chart',
+    'chart_field_chartType' => 'Chart type',
+    'chart_field_chartType_bar' => 'Bar chart',
+    'chart_field_chartType_line' => 'Line chart',
+    'chart_field_from' => 'From',
+    'chart_field_to' => 'To',
+    'chart_field_land' => 'Land',
+    'chart_field_munic' => 'Municipality',
 
     // PDF report
     'pdf_title' => '1st world war death',

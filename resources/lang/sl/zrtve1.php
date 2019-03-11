@@ -59,6 +59,13 @@ return [
     'chart_button_refresh' => 'Osveži graf',
     'chart_num_deaths' => '# smrti',
     'chart_checkItOut' => 'Smrti vojne v grafu',
+    'chart_field_chartType' => 'Tip grafa',
+    'chart_field_chartType_bar' => 'Stolpični',
+    'chart_field_chartType_line' => 'Črtni',
+    'chart_field_from' => 'Od',
+    'chart_field_to' => 'Do',
+    'chart_field_land' => 'Dežela',
+    'chart_field_munic' => 'Občina',
 
     // PDF report
     'pdf_title' => 'Žrtev 1. sv. vojne',
