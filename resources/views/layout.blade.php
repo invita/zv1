@@ -60,6 +60,9 @@
 
     <link rel="stylesheet" href="/lib/zurb/css/normalize.css" />
     <link rel="stylesheet" href="/lib/zurb/css/foundation.css" />
+    <script src="/lib/zurb/js/foundation.min.js"></script>
+    <script src="/lib/zurb/js/foundation/foundation.dropdown.js"></script>
+    <script>$(document).foundation();</script>
 
     <link rel="stylesheet" href="/css/gradients.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="/css/standard.css" type="text/css" media="screen" />

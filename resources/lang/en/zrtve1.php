@@ -1,6 +1,13 @@
 <?php
 
 return [
+    // Top Tabs
+    'mainTabs_pub' => 'Publications',
+    'mainTabs_zrt1' => 'Deaths WW I',
+    'mainTabs_zrt2' => 'Deaths WW II',
+    'mainTabs_pop' => 'Census',
+    'mainTabs_zic' => 'ZIC',
+
     // Datatable Widget
     'dataTable_noData' => 'No table data',
     'dataTable_navFirst' => 'First',

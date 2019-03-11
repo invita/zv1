@@ -20,13 +20,31 @@
 
             <div class="search large-10 medium-10 small-12 columns" style="height: 7em;">
                 <div class="searchTitle">
-                    <div class="row collapse searchInputTabs">
-                        <a class="tab" href="http://www.sistory.si/">PUBLIKACIJE</a>
-                        <a class="tab active" href="http://zv1.sistory.si/?lang={{$lang}}">ŽRTVE I.SV</a>
-                        <a class="tab" href="http://www.sistory.si/zrtve">ŽRTVE II.SV</a>
-                        <a class="tab" href="http://www.sistory.si/popis">POPISI</a>
-                        <a class="tab" href="http://www.sistory.si/zic">ZIC</a>
+                    <!-- Desktop tabs -->
+                    <div class="show-for-large-only">
+                        <div class="row collapse searchInputTabs">
+                            <a class="tab translateHtml" data-translateHtml="mainTabs_pub" href="http://www.sistory.si/"></a>
+                            <a class="tab active translateHtml" data-translateHtml="mainTabs_zrt1"></a>
+                            <a class="tab translateHtml" data-translateHtml="mainTabs_zrt2" href="http://zv2.sistory.si/?lang={{$lang}}"></a>
+                            <a class="tab translateHtml" data-translateHtml="mainTabs_pop" href="http://www.sistory.si/popis"></a>
+                            <a class="tab translateHtml" data-translateHtml="mainTabs_zic" href="http://www.sistory.si/zic"></a>
+                        </div>
                     </div>
+
+                    <!-- Mobile dropdown -->
+                    <div class="show-for-medium-down">
+                        <div class="row collapse searchInputTabsMobile">
+                            <a class="dropdownArrow translateHtml" href="#" data-dropdown="drop1" data-translateHtml="mainTabs_zrt1"></a>
+                            <ul id="drop1" class="f-dropdown" data-dropdown-content>
+                                <li><a class="translateHtml" data-translateHtml="mainTabs_pub" href="http://www.sistory.si/"></a></li>
+                                <li><a class="active translateHtml" data-translateHtml="mainTabs_zrt1"></a></li>
+                                <li><a class="translateHtml" data-translateHtml="mainTabs_zrt2" href="http://zv2.sistory.si/?lang={{$lang}}"></a></li>
+                                <li><a class="translateHtml" data-translateHtml="mainTabs_pop" href="http://www.sistory.si/popis"></a></li>
+                                <li><a class="translateHtml" data-translateHtml="mainTabs_zic" href="http://www.sistory.si/zic"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="content katSearch active" id="pnlZrtve">
                     <form id="searchFormZrtve">
@@ -45,7 +63,7 @@
                     <div class="row collapse searchInputRow" style="margin-top: 5px;">
                         <div class="large-11 medium-11 small-10 columns">&nbsp;</div>
                         <div class="large-1 medium-1 small-2 columns" style="z-index:10;">
-                            <a class="translateHtml" data-translateHtml="text_vseZrtve"
+                            <a class="nowrap translateHtml" data-translateHtml="text_vseZrtve"
                                 onclick="$('#searchInput').val('*'); $('#searchFormZrtve').submit();"></a>
                         </div>
                     </div>

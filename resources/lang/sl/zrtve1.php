@@ -1,6 +1,13 @@
 <?php
 
 return [
+    // Top Tabs
+    'mainTabs_pub' => 'Publikacije',
+    'mainTabs_zrt1' => 'Žrtve I.sv',
+    'mainTabs_zrt2' => 'Žrtve II.sv',
+    'mainTabs_pop' => 'Popisi',
+    'mainTabs_zic' => 'ZIC',
+
     // Datatable Widget
     'dataTable_noData' => 'Tabela je prazna',
     'dataTable_navFirst' => 'Prvi',
