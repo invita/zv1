@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CommonHelpers;
-use App\Helpers\ContentBuilder;
 use App\Helpers\ElasticHelpers;
-use App\Helpers\FooterBuilder;
+use App\Helpers\FieldHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -28,16 +26,8 @@ class FileController extends Controller
             $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
             $html .= '<h3>'.__("zrtve1.pdf_title").': '.$id.'</h3>';
 
-            $fields = [
-                "ID", "PRIIMEK", "PRIIMEK2", "IME", "STARSI",
-                "ROJSTVO", "KRAJ_ROJSTVA", "ZUPNIJA", "BIVALISCE", "OBCINA", "DEZELA", "DOMOVINSKA", "STAN",
-                "VPOKLIC", "SMRT", "KRAJ_SMRTI", "VZROK", "POKOP",
-                "CIN", "ENOTA", "OSTALO",
-                "VIRI", "OPOMBE", "IZVOR",
-            ];
-
             $idx = 0;
-            foreach ($fields as $key) {
+            foreach (FieldHelpers::$fields as $key) {
                 $val = isset($zrtev[$key]) ? $zrtev[$key] : null;
                 if (!$val) continue;
 

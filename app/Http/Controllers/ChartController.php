@@ -7,7 +7,7 @@ use App\Helpers\FooterBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
-class ChartController extends Controller
+class ChartController extends LayoutController
 {
     public function index(Request $request)
     {
@@ -33,13 +33,8 @@ class ChartController extends Controller
         $chartData = self::fillMissingKeysAndSort($qFrom, $qTo, $froms, $tos, $chartDataElastic);
         //print_r($chartData);
 
-
-        $footerHtml = FooterBuilder::getHtml();
-
-        $viewData = [
-            "search" => "",
+        $viewData = $this->getLayoutData($request, [
             "zrtve" => [],
-            "lang" => $lang,
             "types" => $types,
             "froms" => $froms,
             "tos" => $tos,
@@ -51,8 +46,7 @@ class ChartController extends Controller
             "qLand" => $qLand,
             "qMunic" => $qMunic,
             "chartData" => $chartData,
-            "footerHtml" => $footerHtml,
-        ];
+        ]);
         return view('chart', $viewData);
     }
 

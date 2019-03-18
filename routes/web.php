@@ -11,12 +11,9 @@
 |
 */
 
-//Route::get('/', function () {
-    //return view('index');
-    //return redirect()->action('IndexController@index');
-//});
-
 Route::get('/', 'IndexController@index');
+Route::get('/search', 'SearchController@index');
+Route::get('/zrtev', 'ZrtevController@index');
 Route::get('/chart', 'ChartController@index');
 
 Route::post('/api', 'ApiController@index');
@@ -25,5 +22,5 @@ Route::post('/api/dictionary', 'ApiController@dictionary');
 
 Route::get('/api/reindex', 'ApiController@reindex');
 
-Route::get('/file/zrtevPdf', 'FileController@zrtevPdf');
+Route::get('/zrtevPdf', 'FileController@zrtevPdf');
 

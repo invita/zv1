@@ -2,29 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ElasticHelpers;
 use Illuminate\Http\Request;
 
-class SearchController extends Controller
+class SearchController extends LayoutController
 {
     public function index(Request $request)
     {
 
-        //$zrtve = \DB::table('ZRT1_GLAVNA_TABELA')->get();
+        $viewData = $this->getLayoutData($request, [
+        ]);
 
-        $search = $request->input('search');
-        $zrtve = [];
-        if ($search) {
-            $zrtveElastic = ElasticHelpers::search($search);
-            $zrtve = ElasticHelpers::elasticResultToSimpleAssocArray($zrtveElastic);
-        }
-        //print_r($zrtve);
+        return view('search', $viewData);
 
-
-        $viewData = [
-            "search" => $search,
-            "zrtve" => $zrtve,
-        ];
-        return view('index', $viewData);
     }
 }

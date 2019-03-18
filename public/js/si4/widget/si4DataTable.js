@@ -41,7 +41,7 @@ si4.widget.si4DataTable = function(args)
     this.canExportCsv = si4.getArg(args, "canExportCsv", false);
     this.filterHint = si4.getArg(args, "filterHint", true);
     this.customControlls = si4.getArg(args, "customControlls", null);
-
+    this.replaceUrlPagination = si4.getArg(args, "replaceUrlPagination", false);
 
     this.rowsPerPage = si4.getArg(args, "rowsPerPage", si4.defaults.dataTableRowsPerPage); // Ignored if dataSource is given
 
@@ -261,7 +261,7 @@ si4.widget.si4DataTable = function(args)
             if (e.which == 13)
                 _p.switchPage(_p[cpName].pageInput.selector.val());
         });
-        _p[cpName].pageInput.selector.val(1);
+        _p[cpName].pageInput.selector.val(_p.initPage);
 
         _p[cpName].slashSpan = new si4.widget.si4Element({parent:_p[cpName].selector, tagClass:"inline vmid"});
         _p[cpName].slashSpan.selector.html('/');
@@ -348,6 +348,25 @@ si4.widget.si4DataTable = function(args)
             _p.dataSource.pageStart = (_p.currentPage -1) * _p.dataSource.pageCount;
             if (!noRefresh) _p.refresh();
         }
+        this.replacePaginationUrlParams();
+    };
+
+    this.replacePaginationUrlParams = function() {
+        if (_p.replaceUrlPagination && _p.dataSource) {
+            var pageName = window.location.pathname;
+            var params = si4.queryStringToJson(window.location.search);
+            params["page"] = _p.currentPage;
+            params["size"] = _p.rowsPerPage;
+            if (_p.dataSource.sortField) params["sort"] = _p.dataSource.sortField; else delete params["sort"];
+            if (_p.dataSource.sortOrder) params["order"] = _p.dataSource.sortOrder; else delete params["order"];
+            if (Object.keys(_p.dataSource.filter).length) {
+                params["filter"] = btoa(JSON.stringify(_p.dataSource.filter));
+            } else {
+                delete params["filter"];
+            }
+            var url = pageName+si4.jsonToQueryString(params);
+            window.history.replaceState(null, null, url);
+        }
     };
 
     this.goToFirstPage = function(noRefresh) {
@@ -411,6 +430,7 @@ si4.widget.si4DataTable = function(args)
         if (_p.dataSource) {
             _p.dataSource.filter = _p.filter.value;
         }
+        _p.replacePaginationUrlParams();
     };
 
     this.rowReprValue = function(row, entityTitle, primaryKey){
@@ -612,7 +632,7 @@ si4.widget.si4DataTable = function(args)
     this.info = function(infoText) {
         _p.infoDiv.selector.html(infoText);
         _p.infoDiv.selector.fadeIn(si4.defaults.fadeTime);
-    }
+    };
 
     this.reconstruct = function(args){
         console.log("dataTable reconstruct");
@@ -633,6 +653,7 @@ si4.widget.si4DataTable = function(args)
     };
 
     this.setPaginator = function(rowCount) {
+        console.log("setPaginator", rowCount);
         if (!rowCount) return;
         if (!_p.dsControl) return;
         if (!_p.dsControlBottom) return;
@@ -671,6 +692,8 @@ si4.widget.si4DataTable = function(args)
         _p.dsControl.recsPerPageInput.selector.val(newMaxRows);
         _p.dsControlBottom.recsPerPageInput.selector.val(newMaxRows);
         //_p.setPaginator(_p.rowCount);
+
+        this.replacePaginationUrlParams();
 
         _p.createRows();
         _p.refresh();
@@ -718,6 +741,25 @@ si4.widget.si4DataTable = function(args)
         }
         else {
             if (!_p.dataSource) return;
+
+            if (_p.replaceUrlPagination) {
+                var params = si4.queryStringToJson(window.location.search);
+                var size = params["size"] ? parseInt(params["size"]) : _p.rowsPerPage;
+                if (params["page"]) {
+                    _p.currentPage = parseInt(params["page"]);
+                    _p.rowsPerPage = size;
+                    _p.dataSource.pageStart = (_p.currentPage -1) * size;
+                    _p.dataSource.pageCount = size;
+                    if (params["sort"]) _p.dataSource.sortField = params["sort"];
+                    if (params["order"]) _p.dataSource.sortOrder = params["order"];
+                    if (params["filter"]) {
+                        var filter = JSON.parse(atob(params["filter"]));
+                        _p.dataSource.filter = filter;
+                        _p.filter.visible = true;
+                    }
+                }
+            }
+
             _p.dataSource.callbacks.feedData = _p.feedData;
             _p.dataSource.select();
         }
@@ -738,7 +780,7 @@ si4.widget.si4DataTable = function(args)
 
     // if EditorModule given, bind edit events
     if (_p.editorModuleArgs) {
-        _p.onFieldDoubleClick(function (args) {
+        _p.onFieldClick(function (args) {
             if (typeof(_p.selectCallback) == "function") {
                 _p.selectCallback(args);
                 if (_p.tabPage) {
@@ -827,6 +869,9 @@ si4.widget.si4DataTable = function(args)
             _p.dataSource.sortOrder = "asc";
         }
         args.field.setSort(_p.dataSource.sortOrder);
+
+        _p.replacePaginationUrlParams();
+
         _p.refresh();
     });
 
@@ -1344,6 +1389,7 @@ si4.widget.si4DataTableDataSource = function(args) {
     this.aSync = true;
 
     this.getPaginationData = function(){
+        //console.log("getPaginationData", { sortField:_p.sortField, sortOrder:_p.sortOrder, pageStart:_p.pageStart, pageCount:_p.pageCount });
         return { sortField:_p.sortField, sortOrder:_p.sortOrder, pageStart:_p.pageStart, pageCount:_p.pageCount };
     };
 
@@ -1368,30 +1414,30 @@ si4.widget.si4DataTableDataSource = function(args) {
         methodCallData = si4.mergeObjects(methodCallData, _p.getPaginationData());
 
         return methodCallData;
-    }
+    };
 
     this.select = function(args) {
         _p.selectF(_p.getMethodCallData(_p.methodNames.select, args), _p.callbacks.feedData);
-    }
+    };
 
     this.delete = function(args) {
         _p.deleteF(_p.getMethodCallData(_p.methodNames.delete, args), _p.callbacks.feedData);
-    }
+    };
 
     this.updateRow = function(args) {
         _p.updateRowF(_p.getMethodCallData(_p.methodNames.updateRow, args), _p.callbacks.feedData);
         //return si4.callMethod(_p.getMethodCallData(_p.methodNames.updateRow, args), _p.callbacks.feedData);
-    }
+    };
 
     this.exportXls = function(args) {
         return si4.callMethod(_p.getMethodCallData(_p.methodNames.exportXls, args), function(rArgs) {
             if (rArgs.status && rArgs.link) location.href = rArgs.link;
         });
-    }
+    };
 
     this.exportCsv = function(args) {
         return si4.callMethod(_p.getMethodCallData(_p.methodNames.exportCsv, args), function(rArgs) {
             if (rArgs.status && rArgs.link) location.href = rArgs.link;
         });
     }
-}
+};

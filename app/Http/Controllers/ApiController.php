@@ -24,7 +24,7 @@ class ApiController extends Controller
     {
         $input =  file_get_contents("php://input");
         $inputJson = json_decode($input, true);
-        $search = $inputJson["staticData"]["search"];
+        $q = $inputJson["staticData"]["q"];
 
         $pageStart = $inputJson["pageStart"];
         $pageCount = $inputJson["pageCount"];
@@ -35,8 +35,8 @@ class ApiController extends Controller
 
         $zrtve = [];
         $rowCount = 0;
-        if ($search) {
-            $zrtveElastic = ElasticHelpers::search($search, $filter, $pageStart, $pageCount, $sortField, $sortOrder);
+        if ($q) {
+            $zrtveElastic = ElasticHelpers::search($q, $filter, $pageStart, $pageCount, $sortField, $sortOrder);
 
             $rowCount = $zrtveElastic["hits"]["total"];
             $zrtve = ElasticHelpers::elasticResultToSimpleArray($zrtveElastic);
@@ -46,7 +46,7 @@ class ApiController extends Controller
         //print_r($zrtveElastic);
 
         $result = array(
-            "search" => $search,
+            "q" => $q,
             "rowCount" => $rowCount,
             "status" => true,
             "data" => $zrtve,

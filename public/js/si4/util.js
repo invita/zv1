@@ -180,4 +180,26 @@ si4.apiUrlFromName = function(apiName) {
     return apiName.replace(/\.?([A-Z])/g, function (x,y){ return "-" + y.toLowerCase()}).replace(/^_/, "");
 };
 
+// *** Url ***
+
+si4.queryStringToJson = function(queryStr) {
+    if (!queryStr || typeof(queryStr) !== "string") return {};
+    queryStr = queryStr.replace("?", "");
+    var paramsSplit = queryStr.split("&");
+    var result = {};
+    for (var i = 0; i < paramsSplit.length; i++) {
+        var paramKeyVal = paramsSplit[i].split("=");
+        if (paramKeyVal.length !== 2) continue;
+        result[paramKeyVal[0]] = decodeURIComponent(paramKeyVal[1]);
+    }
+    return result;
+};
+
+si4.jsonToQueryString = function(json) {
+    if (!json) return "";
+    if (!Object.keys(json).length) return "";
+    var routeParamsArr = [];
+    for (var key in json) routeParamsArr.push(key+"="+encodeURIComponent(json[key]));
+    return "?"+routeParamsArr.join("&");
+};
 

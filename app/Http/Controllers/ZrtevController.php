@@ -3,28 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ElasticHelpers;
+use App\Helpers\FieldHelpers;
 use Illuminate\Http\Request;
 
-class ZrtevController extends Controller
+class ZrtevController extends LayoutController
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $id = $request->input('id');
+        $zrtevId = $request->input('id');
 
-        $zrtev = [];
-        if ($id) {
-            $zrtevElastic = ElasticHelpers::searchById($id);
-            $zrtev = ElasticHelpers::elasticResultToSimpleAssocArray($zrtevElastic)[$id];
+        if (!$zrtevId) die("Missing Id");
+        $zrtevRest = "";
+
+        $posFirstSep = strpos($zrtevId, "-");
+        if ($posFirstSep !== false) {
+            $zrtevRest = substr($zrtevId, $posFirstSep +1);
+            $zrtevId = substr($zrtevId, 0, $posFirstSep);
         }
 
-        //print_r($zrtev);
+        try {
+            $zrtevId = intval($zrtevId);
+        } catch (\Exception $e) {
+            die("Bad Id");
+        }
 
+        $zrtevElastic = ElasticHelpers::searchById($zrtevId);
+        $zrtev = ElasticHelpers::elasticResultToSimpleAssocArray($zrtevElastic)[$zrtevId];
 
-        $viewData = [
-            "search" => $search,
+        $viewData = $this->getLayoutData($request, [
+            "zrtevId" => $zrtevId,
+            "zrtevRest" => $zrtevRest,
             "zrtev" => $zrtev,
-        ];
+            "fields" => FieldHelpers::$fields,
+        ]);
         return view('zrtev', $viewData);
     }
 }
