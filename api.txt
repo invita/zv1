@@ -1,0 +1,71 @@
+== Deaths Search API ==
+
+- URL: /api/search
+- Method: POST
+
+To call the search API, do a POST HTTP request to the /api/search endpoint with a JSON in the post body.
+
+Example request:
+{
+	"q": "*",              // General search query string. Allows wildcard '*' character.
+	"filter": {            // Filter object. Allowed to be empty object, or it can contain a key for every field[1] to be filtered.
+		"ID": "*",         //   Filter fields also allow wildcard '*' character.
+		"PRIIMEK": "*",
+		"IME": "Jane*"
+	},
+	"sortField": "ID",     // Sort by field[1], default: "ID"
+	"sortOrder": "asc",    // Sort order, 'asc' OR 'desc', default: "asc"
+	"pageStart": 0,        // Pagination offset, default: 0
+	"pageCount": 20        // Page size, default: 20,
+}
+
+Example response:
+{
+  "request": {             // Request parameters listed here.
+    //...
+  },
+  "status": true,          // Boolean indicating if the operation succeeded. When true, expect "rowCount" and "data" keys.
+                           // When false, expect the "error" key with the string error message.
+
+  "rowCount": 1,           // Total count of matching records
+  "data": [                // List of records for selected pageStart, pageCount
+    {
+      "ID": 1,                  // [integer] Identifier
+      "PRIIMEK": "...",         // [string] Last name
+      "PRIIMEK2": "",           // [string] Second last name
+      "IME": "",                // [string] First name
+      "STARSI": "",             // [string] Parents information
+      "ROJSTVO": "",            // [string] Birth date
+      "KRAJ_ROJSTVA": "",       // [string] Birth place
+      "ZUPNIJA": "",            // [string] Birth parish
+      "BIVALISCE": "",          // [string] Residence
+      "OBCINA": "",             // [string] Municipality/District
+      "DEZELA": "",             // [string] Province (Land)
+      "DOMOVINSKA": "",         // [string] Home Jurisdiction
+      "STAN": "",               // [string] Marital status, Occupation, Children
+      "VPOKLIC": "",            // [string] Enlistment
+      "SMRT": "",               // [string] Death date
+      "KRAJ_SMRTI": "",         // [string] Death place
+      "VZROK": "",              // [string] Cause
+      "POKOP": "",              // [string] Burial place
+      "CIN": "",                // [string] Army rank
+      "ENOTA": "",              // [string] Army unit
+      "OSTALO": "",             // [string] Other data
+      "VIRI": "",               // [string] Sources
+      "IZVOR": "",              // [string] Primary database
+      "OPOMBE": "",             // [string] Notes
+      "LAST_MODIFIED": "",      // [string] Record last modified format 'YYYY-MM-DD hh:mm:ss'
+      "ROJSTVO_LETO": 1886,     // [integer] Parsed YEAR of the date of birth
+      "ROJSTVO_MESEC": 10,      // [integer] Parsed MONTH of the date of birth
+      "SMRT_LETO": 1944,        // [integer] Parsed YEAR of the date of death
+      "SMRT_MESEC": 10          // [integer] Parsed MONTH of the date of death
+    }
+  ]
+}
+
+
+[1] Field list: [
+  "ID", "PRIIMEK", "PRIIMEK2", "IME", "STARSI", "ROJSTVO", "KRAJ_ROJSTVA", "ZUPNIJA", "BIVALISCE", "OBCINA",
+  "DEZELA", "DOMOVINSKA", "STAN", "VPOKLIC", "SMRT", "KRAJ_SMRTI", "VZROK", "POKOP", "CIN", "ENOTA",
+  "OSTALO", "VIRI", "OPOMBE", "IZVOR", "LAST_MODIFIED", "ROJSTVO_LETO", "ROJSTVO_MESEC", "SMRT_LETO", "SMRT_MESEC"
+];
