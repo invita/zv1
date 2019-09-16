@@ -121,7 +121,10 @@ class ApiController extends Controller
         $rowCount = $query->count();
         $zrtve = $query->get();
 
-        Log::info("reindex; fromId:".$fromId.", toId:".$toId.", rowCount: ".print_r($rowCount, true));
+        Log::info("reindex1; fromId:".$request->input('fromId')." toId:".$request->input('toId'));
+        Log::info("reindex2; fromId:".$fromId.", toId:".$toId.", rowCount: ".print_r($rowCount, true));
+
+        Log::info("reindex3; fromId:".$request->get("fromId"));
 
         if ($rowCount) {
             // Single or Mass reindex
