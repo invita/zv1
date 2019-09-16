@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 
 class ApiController extends Controller
 {
@@ -119,6 +120,8 @@ class ApiController extends Controller
 
         $rowCount = $query->count();
         $zrtve = $query->get();
+
+        Log::info("reindex; fromId:".$fromId.", toId:".$toId.", rowCount: ".print_r($rowCount, true));
 
         if ($rowCount) {
             // Single or Mass reindex
