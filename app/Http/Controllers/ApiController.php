@@ -123,8 +123,8 @@ class ApiController extends Controller
 
         Log::info("reindex1; fromId:".$request->input('fromId')." toId:".$request->input('toId'));
         Log::info("reindex2; fromId:".$fromId.", toId:".$toId.", rowCount: ".print_r($rowCount, true));
-
         Log::info("reindex3; fromId:".$request->get("fromId"));
+        Log::info("reindex4; ".print_r($request->all(), true));
 
         if ($rowCount) {
             // Single or Mass reindex
