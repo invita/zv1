@@ -28,7 +28,13 @@ class ZrtevController extends LayoutController
         }
 
         $zrtevElastic = ElasticHelpers::searchById($zrtevId);
-        $zrtev = ElasticHelpers::elasticResultToSimpleAssocArray($zrtevElastic)[$zrtevId];
+        $zrtve = ElasticHelpers::elasticResultToSimpleAssocArray($zrtevElastic);
+
+        if (!isset($zrtve[$zrtevId])) {
+            return abort(404);
+        }
+
+        $zrtev = $zrtve[$zrtevId];
 
         $viewData = $this->getLayoutData($request, [
             "zrtevId" => $zrtevId,
