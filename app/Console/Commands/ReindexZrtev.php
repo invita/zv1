@@ -44,7 +44,9 @@ class ReindexZrtev extends Command
         $zrtevId = $this->argument('zrtevId');
         $this->info("Indexing zrtev {$zrtevId}");
 
-        $zrtev = Zrtev::find($zrtevId)->toArray();
+        $zrtevDb = Zrtev::find($zrtevId);
+        $zrtev = $zrtevDb ? $zrtevDb->toArray() : null;
+
         if ($zrtev) {
 
             $dateFieldsToParse = ["ROJSTVO", "SMRT"];
